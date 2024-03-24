@@ -6,16 +6,6 @@ import sqlite3 as sq
 co = sq.connect('Escuelas.db')
 curs = co.cursor()
 
-curs.execute("""
-
-    CREATE TABLE IF NOT EXISTS Primaria (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  
-        nombre TEXT,
-        numeroEstudiantes INT,
-        politica TEXT
-    )
-""")
-
 class Escuela:
     
     def __init__(self, nombre, nivel, numero_de_estudiantes=None):
