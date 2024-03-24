@@ -78,7 +78,7 @@ def Ingresar_datos(nivel, opcion):
 
 def menu_Crear():
     while True:
-        print(globals())
+
         try:
 
             print("| ~~~~~~~~~~~ Crear Escuelas ~~~~~~~~~~~ |")
