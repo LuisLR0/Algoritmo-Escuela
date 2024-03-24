@@ -15,6 +15,7 @@ def menu_Monstrar():
 
         try:
 
+
             print("| ~~~~~~~~~~~ Monstrar Escuelas ~~~~~~~~~~~ |")
 
             print("|~~~~~~ Ingresa el Nivel de la Escuela ~~~~~~|")

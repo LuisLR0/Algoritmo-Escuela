@@ -1,4 +1,20 @@
 import os
+import json
+
+import sqlite3 as sq
+
+co = sq.connect('Escuelas.db')
+curs = co.cursor()
+
+curs.execute("""
+
+    CREATE TABLE IF NOT EXISTS Primaria (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,  
+        nombre TEXT,
+        numeroEstudiantes INT,
+        politica TEXT
+    )
+""")
 
 class Escuela:
     
@@ -25,11 +41,14 @@ class Escuela:
             self._numero_de_estudiantes = nmr_estudiante
         else:
             raise TypeError
+    
+    def set_datosDB(self):
+        consulta = f'INSERT INTO {self.get_nivel()} (nombre, numeroEstudiantes) VALUES (?,?)'
+        curs.execute(consulta, (self.get_name(), self.get_students()))
+        pass
 
     def __repr__(self):
         return "Escuela {nivel} llamada {nombre} cuenta con {numeroDeEstudiantes} estudiantes".format(nivel = self.get_nivel(), nombre = self.get_name(), numeroDeEstudiantes = self.get_students())
-
-
 
 
 
@@ -40,7 +59,12 @@ class Primaria(Escuela):
         self.politica = politica
 
     def get_politicaDeRetiro(self):
-        return "Retirar después de las {retiro}".format(retiro = self.politica)
+        return "Se retiran después de las {retiro}".format(retiro = self.politica)
+    
+    def set_datosDB(self):
+        consulta = f'INSERT INTO {self.get_nivel()} (nombre, numeroEstudiantes, politica) VALUES (?,?,?)'
+        curs.execute(consulta, (self.get_name(), self.get_students(), self.politica))
+        pass
     
     def __repr__(self):
         result = super().__repr__() + ' | Hora de Retiro {retiro}'.format(retiro = self.politica)
@@ -72,6 +96,12 @@ class Secundaria(Escuela):
 
         return result
     
+    def set_datosDB(self):
+        equiposJson = json.dumps(self.equipos)
+        consulta = f'INSERT INTO {self.get_nivel()} (nombre, numeroEstudiantes, equipos) VALUES (?,?,?)'
+        curs.execute(consulta, (self.get_name(), self.get_students(), equiposJson))
+        pass
+    
     def __repr__(self):
         result = super().__repr__() + ' | Equipos deportivos: {equipos}'.format(equipos=self.get_equiposDeportivos())
         return result
@@ -79,3 +109,4 @@ class Secundaria(Escuela):
 
 def formateo():
     return os.system('cls' if os.name == 'nt' else 'clear')
+

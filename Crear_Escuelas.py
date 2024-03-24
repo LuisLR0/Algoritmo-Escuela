@@ -1,7 +1,15 @@
 import School_Catalogue as sch
+import sqlite3 as sq
+import cargarDatos
 
-niveles = ['Primaria', 'Intermedio', 'Secundaria']
+    
+co = sq.connect('Escuelas.db')
+curs = co.cursor()
+
 escuelas = { 1: [], 2: [], 3: []}
+niveles = ['Primaria', 'Intermedio', 'Secundaria']
+
+cargarDatos.cargar_datos(escuelas, niveles)
 
 sch.formateo()
 
@@ -25,17 +33,19 @@ def Ingresar_datos(nivel, opcion):
                 print("|~~| Ingresa Solamente Numeros |~~|\n\n".upper())
         
         if nivel is sch.Primaria:
-            index = 0
+            index = len(escuelas[opcion])
 
             politica = input("|~~| Ingresa a que hora se retiran: ")
             escuelas[opcion].append(nivel(nombre, politica))
             escuelas[opcion][index].set_students(nmr_estudiantes)
 
+            escuelas[opcion][index].set_datosDB()
+
             index += 1
 
         elif nivel is sch.Secundaria:
             equipos = []
-            index = 0
+            index = len(escuelas[opcion])
 
             while True:
                 sch.formateo()
@@ -45,17 +55,21 @@ def Ingresar_datos(nivel, opcion):
                     break
                 else:
                     equipos.append(equipo)
-                
+
             escuelas[opcion].append(nivel(nombre, equipos))
             escuelas[opcion][index].set_students(nmr_estudiantes)
+
+            escuelas[opcion][index].set_datosDB()
 
             index += 1
 
         else:
-            index = 0
+            index = len(escuelas[opcion])
 
             escuelas[opcion].append(nivel(nombre))
             escuelas[opcion][index].set_students(nmr_estudiantes)
+
+            escuelas[opcion][index].set_datosDB()
 
             index += 1
 
@@ -64,7 +78,7 @@ def Ingresar_datos(nivel, opcion):
 
 def menu_Crear():
     while True:
-
+        print(globals())
         try:
 
             print("| ~~~~~~~~~~~ Crear Escuelas ~~~~~~~~~~~ |")
@@ -93,6 +107,8 @@ def menu_Crear():
                         Ingresar_datos(sch.Secundaria, opcion)
             elif opcion == 0:
                 sch.formateo()
+                sch.co.commit()
+                sch.co.close()
                 break
             else:
                 raise TypeError
@@ -100,3 +116,5 @@ def menu_Crear():
         except:
             sch.formateo()
             print("\n|~~~| Ingrese una Opcion Valida |~~~|\n".upper())
+
+

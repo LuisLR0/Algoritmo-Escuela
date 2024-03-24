@@ -1,4 +1,5 @@
 import os
+
 from Monstrar_Escuelas import *
 from Crear_Escuelas import *
 
